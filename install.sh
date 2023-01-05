@@ -9,11 +9,11 @@
 # @@Copyright        :  Copyright: (c) 2023 Jason Hempstead, Casjays Developments
 # @@Created          :  Thursday, Jan 05, 2023 16:01 EST
 # @@File             :  install.sh
-# @@Description      :  
+# @@Description      :
 # @@Changelog        :  New script
 # @@TODO             :  Better documentation
-# @@Other            :  
-# @@Resource         :  
+# @@Other            :
+# @@Resource         :
 # @@Terminal App     :  no
 # @@sudo/root        :  no
 # @@Template         :  installers/dockermgr
@@ -158,14 +158,14 @@ SSL_KEY="$HOST_SSL_KEY"
 SSL_CERT="$HOST_SSL_CRT"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set to yes for all ports to listen on localhost only
-HOST_LOCAL_ONLY="no"
+HOST_LOCAL_ONLY="yes"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set to yes to have HTTP[S] or SERVICE to listen on localhost only
 CONTAINER_PRIVATE="no"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Add service port [port] or [port:port] - LISTEN will be added if defined [DEFINE_LISTEN] or CONTAINER_PRIVATE=yes
 # Only ONE HTTP or HTTPS if web server or SERVICE port for mysql pgsql ftp etc. add more to CONTAINER_ADD_CUSTOM_PORT
-CONTAINER_HTTP_PORT=""
+CONTAINER_HTTP_PORT="19051:80"
 CONTAINER_HTTPS_PORT=""
 CONTAINER_SERVICE_PORT=""
 CONTAINER_ADD_CUSTOM_PORT=""
@@ -174,7 +174,7 @@ CONTAINER_ADD_CUSTOM_PORT+=""
 # Add Add service port [listen]:[externalPort:internalPort]/[tcp,udp]
 CONTAINER_ADD_CUSTOM_LISTEN=""
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Set this to 0.0.0.0 to listen on all or specific addresses
+# Set this to 0.0.0.0 to listen on all or specific address
 DEFINE_LISTEN=""
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Set this to the protocol the the container will use [http,https,git,ftp,etc]
@@ -323,6 +323,7 @@ CONTAINER_DOMAINNAME="${CONTAINER_DOMAINNAME:-$APPNAME.$SERVER_SHORT_DOMAIN.$SER
 echo "$CONTAINER_HOSTNAME" | grep -Fq '.' || CONTAINER_HOSTNAME="$APPNAME.$SERVER_SHORT_DOMAIN.$SERVER_FULL_DOMAIN"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Configure variables
+[ "$HOST_LOCAL_ONLY" = "yes" ] && CONTAINER_PRIVATE="yes"
 [ "$CONTAINER_HTTPS_PORT" = "" ] || CONTAINER_HTTP_PROTO="https"
 [ "$DOCKER_SOCKET_ENABLED" = "yes" ] && ADDITIONAL_MOUNTS+="$DOCKER_SOCKET_MOUNT:/var/run/docker.sock "
 [ "$HOST_LOCAL_ONLY" = "yes" ] && DEFINE_LISTEN="127.0.0.1" && HOST_LISTEN_ADDR="127.0.0.1" || HOST_LOCAL_ONLY=""
